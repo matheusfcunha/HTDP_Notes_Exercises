@@ -1,0 +1,81 @@
+1. From Problem Analysis to Data Definitions
+
+Express how you wish to represent information as data. A one-line comment suffices:
+; We use numbers to represent centimeters.
+
+Formulate data definitions, for the classes of data you consider critical for the success of your program.
+
+Here is a data definition as example:
+; A Temperature is a Number. 
+; interpretation represents Celsius degrees
+
+2. Signature, Purpose Statement, Header
+
+Write down a signature, a statement of purpose, and a function header.
+
+A function signature is a comment that tells the readers of your design how many inputs your function consumes, from which classes they are drawn, and what kind of data it produces. 
+Here example for functions that respectively
+ - consume one String and produce a Number:
+	; String -> Number
+
+A purpose statement is a BSL comment that summarizes the purpose of the function in a single line. If you are ever in doubt about a purpose statement, write down the shortest possible answer to the question
+	what does the function compute?
+
+When you formulate a purpose statement, it is often useful to employ the parameter names to clarify what is computed. For example,
+	; Number String Image -> Image 
+	; adds s to img,
+	; y pixels from the top and 10 from the left 
+	(define (add-image y s img)
+  	  empty-scene 100 100))
+
+  Finally, a header is a simplistic function definition, also called a stub. Pick one variable name for each class of input in the signature; the body of the function can be any piece of data from the output class. These three function headers match the above three signatures:
+	(define (f a-string) 0)
+
+3. Functional Examples
+
+  Illustrate the signature and the purpose statement with some functional examples. To construct a functional example, pick one piece of data from each input class from the signature and determine what you expect back.
+
+Suppose you are designing a function that computes the area of a square. Clearly this function consumes the length of the square’s side, and that is best represented with a (positive) number. Assuming you have done the first process step according to the recipe, you add the examples between the purpose statement and the header and get this:
+	; Number -> Number
+	; computes the area of a square with side len 
+	; given: 2, expect: 4
+	; given: 7, expect: 49
+	(define (area-of-square len) 0)
+
+4. Function Template
+
+The next step is to take inventory, to understand what are the givens and what we need to compute.We owe the term “inventory” to Stephen Bloch. For the simple functions we are considering right now, we know that they are given data via parameters. While parameters are placeholders for values that we don’t know yet, we do know that it is from this unknown data that the function must compute its result. To remind ourselves of this fact, we replace the function’s body with a template.
+
+For now, the template contains just the parameters, so that the preceding example looks like this:
+	(define (area-of-square len)
+   		(... len ...))
+The dots remind you that this isn’t a complete function, but a template, a suggestion for an organization.
+
+5. Function Definition
+
+  It is now time to code. In general, to code means to program, though often in the narrowest possible way, namely, to write executable expressions and function definitions.
+
+  To us, coding means to replace the body of the function with an expression that attempts to compute from the pieces in the template what the purpose statement promises.
+
+6. Testing
+
+The last step of a proper design is to test the function on the examples that you worked out before. For now, testing works like this. Click the RUN button and enter function applications that match the examples in the interactions area:
+> (area-of-square 2)
+4
+
+> (area-of-square 7)
+49
+
+The results must match the output that you expect;
+
+If the result doesn’t match the expected output, consider the following three possibilities:
+
+a. You miscalculated and determined the wrong expected output for some of the examples.
+
+b. Alternatively, the function definition computes the wrong result. When this is the case, you have a logical error in your program, also known as a bug.
+
+c. Both the examples and the function definition are wrong.
+
+
+
+

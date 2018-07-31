@@ -1,0 +1,8 @@
+An enumeration lists every single piece of data that belongs to it, while an interval specifies a range of data. The last one, itemizations, mixes the first two, specifying ranges in one clause of its definition and specific pieces of data in another. The chapter ends with the general design strategy for such situations.
+
+
+The main idea of an enumeration is that it defines a collection of data as a finite number of pieces of data.
+
+We make one test per sub-class in the data definition. 
+
+In general, intervals deserve special attention when you make up examples, that is, they deserve at least three kinds of examples: one from each end and another one from inside. 

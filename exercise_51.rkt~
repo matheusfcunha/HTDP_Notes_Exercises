@@ -1,0 +1,92 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname exercise_51) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
+; Exercise 51. http://www.htdp.org/2018-01-06/Book/part_one.html#%28counter._%28exercise._cond3%29%29
+
+; simulates a traffic light for a given duration. The program renders the state of a traffic light as a solid circle of the appropriate color,
+; and it changes state on every clock tick. What is the most appropriate initial state? Ask your engineering friends. 
+
+
+(define TRAFFIC-LIGHT-SIZE 3)
+(define DECREASE-BY-CLOCK-TICK 1)
+(define CLOCK-TICK-RATE 1)
+(define SIMULATION-END-TIME 0)
+(define NUM-OF-BULBS 3)
+(define LIGHT-RED (make-color 255 0 0 120))
+(define LIGHT-YELLOW (make-color 255 255 0 120))
+(define LIGHT-GREEN (make-color 0 255 0 120))
+(define STRONG-RED (make-color 255 0 0 255))
+(define STRONG-YELLOW (make-color 255 255 0 255))
+(define STRONG-GREEN (make-color 0 255 0 255))
+(define BACKGROUND-WIDTH (* 150 TRAFFIC-LIGHT-SIZE))
+(define BACKGROUND-HEIGHT (* 50 TRAFFIC-LIGHT-SIZE))
+(define BACKGROUND (empty-scene BACKGROUND-WIDTH BACKGROUND-HEIGHT))
+(define BULB-SIZE (/ BACKGROUND-WIDTH 7))
+(define RED-BULB-OFF (circle BULB-SIZE "solid" LIGHT-RED))
+(define YELLOW-BULB-OFF (circle BULB-SIZE "solid" LIGHT-YELLOW))
+(define GREEN-BULB-OFF (circle BULB-SIZE "solid" LIGHT-GREEN))
+(define RED-BULB-ON (circle BULB-SIZE "solid" STRONG-RED))
+(define YELLOW-BULB-ON (circle BULB-SIZE "solid" STRONG-YELLOW))
+(define GREEN-BULB-ON (circle BULB-SIZE "solid" STRONG-GREEN))
+(define BULB-LEFT-X (- (/ BACKGROUND-WIDTH 3) BULB-SIZE))
+(define BULB-CENTER-X  (/ BACKGROUND-WIDTH 2) )
+(define BULB-RIGHT-X (- (/ BACKGROUND-WIDTH 1) (* BULB-SIZE 1.35)))
+(define BULB-Y-POSITION (/ BACKGROUND-HEIGHT 2))
+(define TRAFFIC-LIGHT-OFF (place-image GREEN-BULB-OFF BULB-LEFT-X BULB-Y-POSITION
+                                   (place-image YELLOW-BULB-OFF BULB-CENTER-X BULB-Y-POSITION
+                                                (place-image RED-BULB-OFF BULB-RIGHT-X BULB-Y-POSITION BACKGROUND))))
+(define TRAFFIC-LIGHT-GREEN (place-image GREEN-BULB-ON BULB-LEFT-X BULB-Y-POSITION TRAFFIC-LIGHT-OFF))
+(define TRAFFIC-LIGHT-YELLOW (place-image YELLOW-BULB-ON BULB-CENTER-X BULB-Y-POSITION TRAFFIC-LIGHT-OFF))
+(define TRAFFIC-LIGHT-RED (place-image RED-BULB-ON BULB-RIGHT-X BULB-Y-POSITION TRAFFIC-LIGHT-OFF))
+
+; simulation-time is a Number
+; A Number is a second
+; interpretation is, second(s) remaining to execute trafficLight
+
+; simulation-time -> simulation-time
+; Launches the program based on given Number of simulation-time
+; st stands for simulation-time
+(define (trafficLight st)
+  (big-bang st
+    [on-tick decrease-st CLOCK-TICK-RATE]
+    [to-draw render]
+    [stop-when end?]
+    )
+  )
+
+; simulation-time -> simulation-time
+; Decrease one from simulation-time (Number)
+(check-expect (decrease-st 10) 9)
+(define (decrease-st st)
+  (- st DECREASE-BY-CLOCK-TICK))
+
+; simulation-time -> Image
+; Render TRAFFIC-LIGHT-... (change the color of the Bulb), based on given simulation-time  using f(x) = modulo(x,3) formula  :
+; 2 is TRAFFIC-LIGHT-GREEN
+; 1 is TRAFFIC-LIGHT-YELLOW 
+; 0 is TRAFFIC-LIGHT-RED
+(check-expect (render 20) TRAFFIC-LIGHT-GREEN)
+(check-expect (render 19) TRAFFIC-LIGHT-YELLOW)
+(check-expect (render 18) TRAFFIC-LIGHT-RED)
+(check-expect (render 17) TRAFFIC-LIGHT-GREEN)
+(define (render st)
+  (cond
+    [(equal? (modulo st NUM-OF-BULBS) 2) TRAFFIC-LIGHT-GREEN]
+    [(equal? (modulo st NUM-OF-BULBS) 1) TRAFFIC-LIGHT-YELLOW]
+    [(equal? (modulo st NUM-OF-BULBS) 0) TRAFFIC-LIGHT-RED]) 
+  )
+
+
+; simulation-time -> Boolean
+; Check if simulation has ended, based on simulation-time:
+; if st -> SIMULATION-END-TIME #false
+; if st = SIMULATION-END-TIME #true
+; By default simulation end's when st = 0 
+(check-expect (end? 10) #false)
+(check-expect (end? 1) #false)
+(check-expect (end? 0) #true)
+(define (end? st)
+  (equal? st SIMULATION-END-TIME) 
+  )
+
+(trafficLight 10)
