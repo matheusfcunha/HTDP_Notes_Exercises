@@ -1,0 +1,10 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname exercise_76) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
+; Exercise 76. https://htdp.org/2018-01-06/Book/part_one.html#%28counter._data-uni._%28exercise._ex~3atime-structure%29%29
+
+(define-struct point-in-time[hours minutes seconds])
+
+; point-in-time is a Structure:
+; (make-point-in-time Number Number Number)
+; interpretation is, hours minutes and seconds are Numbers, specific time points since midnight.
