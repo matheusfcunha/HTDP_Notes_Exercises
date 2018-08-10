@@ -1,0 +1,110 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname exercise_97) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
+; -----------------------------------    CONSTANTS   --------------------------------------------
+(define BACKGROUND-WIDTH 200)
+(define BACKGROUND-HEIGHT 200)
+(define BACKGROUND (empty-scene BACKGROUND-WIDTH BACKGROUND-HEIGHT))
+(define UFO-IMG-SIZE 10)
+(define TANK-Y-POS 15)
+(define TANK-IMG (rectangle 40 30 "solid" "blue"))
+(define UFO-IMG (circle UFO-IMG-SIZE "solid" "green"))
+(define MISSILE-IMG (triangle 15 "solid" "black"))
+
+; ------------------------------      DATA DEFINITIONS    ------------------------------------------
+(define-struct aim [ufo tank])
+; Aim is a structure.
+; (make-aim UFO Tank)
+; interpretation worldState(s) before the missile is fired.
+; Examples:
+(make-aim ufo-ex1 tank-ex1)
+(make-aim ufo-ex4 tank-ex5)
+(make-aim ufo-ex5 tank-ex5)
+(make-aim ufo-ex5 tank-ex6)
+
+(define-struct fired [ufo tank missile])
+; Fired is a structure.
+; (make-fired UFO Tank Missile)
+; interpretation is, WorldState(s) after the missile is fired.
+; Examples: 
+(make-fired ufo-ex1 tank-ex1 missile-ex1)
+(make-fired ufo-ex4 tank-ex5 missile-ex4)
+(make-fired ufo-ex5 tank-ex5 missile-ex3)
+(make-fired ufo-ex5 tank-ex6 missile-ex5)
+
+; A UFO is a Posn, interval is:
+; - x: [UFO-IMG-SIZE + 5, BACKGROUND-WIDTH - (UFO-IMG-SIZE + 5)]  [15, 185]
+; - y: [UFO-IMG-SIZE + 5, BACKGROUND-HEIGHT - UFO-IMG-SIZE]       [15, 185]
+; interpretation (make-posn x y) is the UFO's location 
+; (using the top-down, left-to-right convention)
+; Examples:
+(define ufo-ex1 (make-posn 15 15))
+(define ufo-ex2 (make-posn 15 185))
+(define ufo-ex3 (make-posn 185 15))
+(define ufo-ex4 (make-posn 100 100))
+(define ufo-ex5 (make-posn 185 185))
+ 
+(define-struct tank [loc vel])
+; A Tank is a structure:
+;   (make-tank Number Number). 
+; interpretation (make-tank x dx) specifies the position:
+; x  - [15, 185]; x coordinate location on BACKGROUND.
+; dx is either -3 or 3; tank's speed/direction: dx pixels/tick
+; Examples:
+(define tank-ex1 (make-tank 15 -3))
+(define tank-ex2 (make-tank 100 -3))
+(define tank-ex3 (make-tank 185 -3))
+(define tank-ex4 (make-tank 15 3))
+(define tank-ex5 (make-tank 100 3))
+(define tank-ex6 (make-tank 185 3))
+
+; A Missile is a Posn. 
+; interpretation (make-posn x y) is the missile's place,
+; x is tank actual position, y is position from top to bottom
+; x - [15, 185]
+; y - [15, 185]
+; Examples:
+(define missile-ex1 (make-posn 15 15))
+(define missle-ex2 (make-posn 15 185))
+(define missle-ex3 (make-posn 185 15))
+(define missle-ex4 (make-posn 100 100))
+(define missile-ex5 (make-posn 185 185))
+
+; A SIGS is one of: 
+; – Aim;   (make-aim UFO Tank)
+; – Fired; (make-fired UFO Tank Missile)
+; interpretation represents the complete state of a 
+; space invader game
+
+
+; ------------------------------------     FUNCTIONS       ----------------------------------------------
+
+; SIGS -> Image
+; adds TANK, UFO, and possibly MISSILE to 
+; the BACKGROUND scene
+(define (si-render s)
+  (cond
+    [(aim? s)
+     (tank-render (aim-tank s)
+                  (ufo-render (aim-ufo s) BACKGROUND))]
+    [(fired? s)
+     (tank-render
+       (fired-tank s)
+       (ufo-render (fired-ufo s)
+                   (missile-render (fired-missile s)
+                                   BACKGROUND)))]))
+
+
+
+; ----------------------------------       HELPER/AUXILIARY FUNCTIONS        ------------------------------------------
+
+
+; Tank Image -> Image 
+; adds t to the given image im
+(define (tank-render t im) im)
+ 
+; UFO Image -> Image 
+; adds u to the given image im
+(check-expect )
+(define (ufo-render u im)
+  )
