@@ -3,4 +3,4 @@
 > Create Wish List
 > Define WorldState and it's data definition
 > Design every function based on Function Recipe
-> Step 3 at Render Function: it's good to  have sketch/image examples
+> Note: Step 3 at Render Function: it's good to  have sketch/image examples
