@@ -1,0 +1,13 @@
+With one small step, you can now design your first file utility:
+
+; String -> List-of-numbers
+; counts the words on each line in the given file
+(define (file-statistic file-name)
+  (words-on-line
+    (read-words/line file-name)))
+
+It merely composes a library function with words-on-line. The former reads a file as a List-of-list-of-strings and hands this value to the latter.
+
+!!!!
+This idea of composing a built-in function with a newly designed function is common. Naturally, people don’t design functions randomly and expect to find something in the chosen programming language to complement their design. Instead, program designers plan ahead and design the function to the output that available functions deliver. More generally still and as mentioned above, it is common to think about a solution as a composition of two computations and to develop an appropriate data collection with which to communicate the result of one computation to the second one, where each computation is implemented with a function.
+!!!!

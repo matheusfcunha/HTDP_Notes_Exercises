@@ -1,0 +1,45 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-reader.ss" "lang")((modname Exercise_251) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
+; Exercise 251. https://htdp.org/2018-01-06/Book/part_three.html#%28counter._%28exercise._ex~3aabs-sum-prod%29%29
+
+
+; [List-of Number] -> Number
+; computes the sum of 
+; the numbers on l
+(check-expect (sum '(1 2 3)) 6)
+(define (sum l)
+  (cond
+    [(empty? l) 0] ;;;;;;;;;;;;;
+    [else
+     (+ (first l) ;;;;;;;;;;;;
+        (sum (rest l)))]))
+  
+
+; [List-of Number] -> Number
+; computes the product of 
+; the numbers on l
+(check-expect (product '(1 2 3 4)) 24)
+(define (product l)
+  (cond
+    [(empty? l) 1] ;;;;;;;;;;;
+    [else
+     (* (first l) ;;;;;;;;;;;;;
+        (product (rest l)))]))
+
+ 
+ 
+; ------------------------------- ABSTRACTION ------------------------------
+
+
+; ...  ... ...-> ...
+; Computes the 'op' of the numbers on 'l'
+(check-expect (fold1 + 0 '(1 2 3)) 6)
+(check-expect (fold1 * 1 '(1 2 3 4)) 24)
+(define (fold1 op empty-value l)                          ; is this Reduce function? (define (reduce func initial-value list))
+  (cond
+    [(empty? l) empty-value] 
+    [else
+     (op (first l)
+        (fold1 op empty-value (rest l)))]))
+
